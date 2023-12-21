@@ -14,8 +14,8 @@ CPCL provides support for using one and only one incoming protocol per configura
 *TODO: define common errors?*
 
 #### SAML IDP
-To describe the configuration of a SAML IdP delivering attributes and identifiers, as "saml_idp" section MAY be defined.
-This section describs the required and optional parameters for the "saml_idp" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown. 
+To describe the configuration of a SAML IdP delivering attributes and identifiers, a "saml_idp" section MAY be defined.
+This section describes the required and optional parameters for the "saml_idp" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown. 
 To establish a secure connection between the saml_idp entity and the proxy it may be required to validate the entity metadata using a trusted third party. This is out of scope for CPCL. 
 
 | Parameter | Status | Supported Values | Description |
@@ -42,8 +42,8 @@ out:
 ```
 
 #### SAML IDPs
-To describe the configuration of multiple SAML IdPs delivering attributes and identifiers, a "saml_idps" section MAY be defined.
-This section describs the required and optional parameters for the "saml_idps" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown.
+To describe the configuration of multiple SAML IdPs delivering (the same) attributes and identifiers, a "saml_idps" section MAY be defined.
+This section describes the required and optional parameters for the "saml_idps" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown.
 For proper user flow in this scenario, it is assumed the proxy implements a discovery interface to allow the user to select the correct SAML identity provider from the set of available identity providers.  
 The entiteis descriptor provided as part of this configuration MAY include none IdP entity types. The proxy MUST ignore such entities.
 To establish a secure connection between the saml_idps and the proxy it may be required to validate the entities metadata using a trusted third party. This is out of scope for CPCL. 
@@ -71,8 +71,8 @@ out:
 
 #### OIDC OP
 To describe the configuration of an OpenID Connect OP delivering claims and identifiers, an "oidc_op" section MAY be defined.
-This section describs the required and optional parameters for the "oidc_op" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown. 
-To establish a connection between the oidc_op entity and the proxy it may be required to register the proxy as a client to the OIDC OP. This is out of scope for CPCL. 
+This section describes the required and optional parameters for the "oidc_op" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown. 
+To establish a connection between the oidc_op entity and the proxy, it may be required to register the proxy as a client to the OIDC OP. This is out of scope for CPCL. 
 
 | Parameter | Status | Supported Values | Description |
 | --- | --- | --- | --- |
@@ -95,27 +95,27 @@ out:
     ...
 ```
 
-### Rules
-The rules section of the configuration describes how the proxy should internally process the conversion of identifiers or credentials from the IN side to the OUT side. 
+### Processor rules
+The processor rules section of the configuration describes how the proxy should internally process the conversion of identifiers or credentials from the IN side to the OUT side. 
 
-As a general formatting rule in the rules section, an incoming credential is prefixed with "in.", while an outgoing credential is prefixed with "out.". Both prefixes MUST NOT be part of credentials exiting the proxy. 
+As a general formatting rule in this section, an incoming credential is prefixed with "in.", while an outgoing credential is prefixed with "out.". Both prefixes MUST NOT be part of credentials exiting the proxy. 
 
-Multiple rules may operate on the same in or outgoing credential.
+Processor rules must be executed in the configured sequence. Multiple rules may operate on the same in or outgoing credential.
 
-Rules may be nested to combine multiple operations on a credentials. In case nesting is detected, the proxy MUST prcess the rules starting at the innermost rule.
+Rules may be nested to combine multiple operations on a credentials. In case nesting is detected, the proxy MUST process the rules starting at the innermost rule.
 
-To support CPCL, the proxy MUST implement the following processing rules. All values provided to the rule operators are 
+To support CPCL, the proxy MUST implement the following processing rules. 
 
 | Rule | IN | OUT | Description | 
 | --- | --- | ---| --- |
 | pass | in.foo | out.bar | The value of the one or more incoming credentials is copied into the outgoing credential| 
 | pass | in.foo in.bar | out.foobar | place either incoming credential value in outgoing credential value. If first credential is matched, others MUST be ignored.|
 | passe | in.foo in.bar | out.foobar | Place incoming credential values in into outgoing credential value as an enumeration.|
-| passo | in.foo in.bar| out.foobar | Place incoming credential value in preference of order into outgoing credential value.|
-| concat | in.foo in.bar 'stringvalue' | out.foobar | Concatenate 1 or more incoming credentials using an optional seperator. of the value provided is not prefixed with either 'in.' or 'out.' a literal string value is assumed |
+| passo | in.foo in.bar| out.foobar | Place incoming credential value in preference of order into outgoing credential value. If an incoming value is matched, all subsquent incoming values MUST be ignored.|
+| concat | in.foo in.bar 'stringvalue' | out.foobar | Concatenate 1 or more incoming credentials or string values. If the value provided is not prefixed with either 'in.' or 'out.' a literal string value is assumed |
 | split | in.foobar seperator | out.foo out.bar | Split an incoming credentials using the first occurance of the seperator|
-| triml | in.foobar len | out.obar | Trim the incoming credential startign fromthe leftmost character for length 'len'|
-| trimr | in.foobar len | out.foob | Trim the incoming credential startign fromthe rightmost character for length 'len'|
+| triml | in.foobar len | out.obar | Trim the incoming credential starting fromthe leftmost character for length 'len'|
+| trimr | in.foobar len | out.foob | Trim the incoming credential starting fromthe rightmost character for length 'len'|
 | regexp | in.foobar regexp | out.raboof | Perform a regular experession 'regexp' on the incoming credential |
 
 
@@ -137,12 +137,12 @@ rules:
         in.bar
         out.foobar
 
-    passo # place incoming credential value in preference of order into outgoing credential value. 
+    passo # place incoming credential value in preference of order into outgoing credential value. If a incoming value is matched, all subsquent incoming values MUST be ignored.
         in.foo
         in.bar
         out.foobar
 
-    concat # Concatenate 1 or more incoming credentials using an optional seperator. of the value provided is not prefixed with either 'in.' or 'out.' a literal string value is assumed 
+    concat # Concatenate 1 or more incoming credentials using an optional seperator. If the value provided is not prefixed with either 'in.' or 'out.' a literal string value is assumed 
         in.foo 
         in.bar 
         "stringvalue"
@@ -154,12 +154,12 @@ rules:
         out.foo
         out.bar
 
-    triml # Trim the incoming credential startign fromthe leftmost character for length 'len'
+    triml # Trim the incoming credential startign from the leftmost character for length 'len'
         in.foobar
         len
         out.obar
 
-    trimr # Trim the incoming credential startign fromthe rightmost character for length 'len'
+    trimr # Trim the incoming credential startign from the rightmost character for length 'len'
         in.foobar
         len
         out.foob
@@ -172,7 +172,7 @@ rules:
 
 ### OUT
 This section describes the configuration parameters of the entity or entities connected to the proxy which are the source of incoming credentials. Depending on the protocol used to provide the credentials, a protocol specific section is used to describe the configuration of the remote party. 
-CPCL provides support for using one and only one incoming protocol per configuration. If none or multiple incoming protocol configurations are described, the configuration MUST be rejected as faulty and an error MUST must be thrown.
+CPCL provides support for using one and only one outgoing protocol per configuration. If none or multiple outgoing protocol configurations are described, the configuration MUST be rejected as faulty and an error MUST must be thrown.
 *TODO: define common errors?*
 
 #### SAML SP
@@ -204,8 +204,8 @@ out: # This side of the proxy sends the credentials from the resource configured
 ```
 
 #### SAML SPs
-To describe the configuration of multiple SAML SPs recieving attributes and identifiers, a "saml_sps" section MAY be defined.
-This section describs the required and optional parameters for the "saml_sps" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown.
+To describe the configuration of multiple SAML SPs recieving (the same) attributes and identifiers, a "saml_sps" section MAY be defined.
+This section describes the required and optional parameters for the "saml_sps" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown.
 Please note that in this scenario each and every SP will recieve the same set of attributes from the proxy.  
 The entities descriptor provided as part of this configuration MAY include none SP entity types. The proxy MUST ignore such entities.
 To establish a secure connection between the saml_sps and the proxy it may be required to validate the entities metadata using a trusted third party. This is out of scope for CPCL. 
@@ -233,7 +233,7 @@ out: # This side of the proxy sends the credentials to the resources configured 
 
 #### OIDC RP
 To describe the configuration of an OpenID Connect RP recieving claims and identifiers, an "oidc_rp" section MAY be defined.
-This section describs the required and optional parameters for the "oidc_rp" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown. 
+This section describes the required and optional parameters for the "oidc_rp" configuration. If a required parameter is empty or missing, the configuration MUST be rejected as faulty and an error MUST must be thrown. 
 To establish a connection between the oidc_op entity and the proxy it may be required to register the RP as a client to the proxy. This is out of scope for CPCL. 
 
 | Parameter | Status | Supported Values | Description |
