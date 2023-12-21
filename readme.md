@@ -108,8 +108,8 @@ To support CPCL, the proxy MUST implement the following processing rules.
 
 | Rule | IN | OUT | Description | 
 | --- | --- | ---| --- |
-| pass | in.foo | out.bar | The value of the one or more incoming credentials is copied into the outgoing credential| 
-| pass | in.foo in.bar | out.foobar | place either incoming credential value in outgoing credential value. If first credential is matched, others MUST be ignored.|
+| pass | in.foo | out.bar | The value of the one incoming credentials is copied into the outgoing credential| 
+| pass | in.foo in.bar | out.foobar | place either or both incoming credential value in outgoing credential value. If multiple credentials are incoming, they should be seperated using a space and the credential order should be maintained in the outgoing credential|
 | passe | in.foo in.bar | out.foobar | Place incoming credential values in into outgoing credential value as an enumeration.|
 | passo | in.foo in.bar| out.foobar | Place incoming credential value in preference of order into outgoing credential value. If an incoming value is matched, all subsquent incoming values MUST be ignored.|
 | concat | in.foo in.bar 'stringvalue' | out.foobar | Concatenate 1 or more incoming credentials or string values. If the value provided is not prefixed with either 'in.' or 'out.' a literal string value is assumed |
@@ -127,7 +127,7 @@ rules:
         in.foo
         out.bar
 
-    pass # 
+    pass # place incoming credential values in outgoing credential value
         in.foo
         in.bar
         out.foobar
