@@ -1,4 +1,4 @@
-# Common Proxy Configuration Langauge
+# Common Proxy Configuration Language
 
 ## Introduction
 The Common Proxy Configuration Language allows for describing the configuration of the external entities connected to an AAI proxy, typically based on SAML or OIDC, independently from the proxy product used to implement the proxy.
