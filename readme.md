@@ -262,3 +262,297 @@ out: # This side of the proxy recieves the credentials from the resource configu
      redirect_uri: "https://foobar.example.org/callback.php"
      dynamic_registration: false
 ```
+Full example for two SAML entities in eduGAIN
+```
+---
+{
+    "in": {
+        "description": "",
+        "entityid": "https://access-check.edugain.org/simplesaml/saml2/idp/metadata.php",
+        "metadata_url": [
+            "https://mds.edugain.org/edugain-v2.xml"
+        ],
+        "name": "eduGAIN Access Check"
+    },
+    "out": {
+        "description": "",
+        "entityid": "https://attribute-viewer.aai.switch.ch/shibboleth",
+        "metadata_url": [
+            "https://mds.edugain.org/edugain-v2.xml"
+        ],
+        "name": "AAI Attribute Viewer"
+    },
+    "rules": [
+        {
+            "pass": {
+                "in": "eduPersonAffiliation",
+                "out": "eduPersonAffiliation"
+            }
+        },
+        {
+            "pass": {
+                "in": "email",
+                "out": "email"
+            }
+        },
+        {
+            "pass": {
+                "in": "givenName",
+                "out": "givenName"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonScopedAffiliation",
+                "out": "eduPersonScopedAffiliation"
+            }
+        },
+        {
+            "pass": {
+                "in": "surname",
+                "out": "surname"
+            }
+        },
+        {
+            "pass": {
+                "in": "commonName",
+                "out": "commonName"
+            }
+        },
+        {
+            "pass": {
+                "in": "displayName",
+                "out": "displayName"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonUniqueId",
+                "out": "eduPersonUniqueId"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonPrincipalName",
+                "out": "eduPersonPrincipalName"
+            }
+        },
+        {
+            "pass": {
+                "in": "schacHomeOrganization",
+                "out": "schacHomeOrganization"
+            }
+        },
+        {
+            "pass": {
+                "in": "schacHomeOrganizationType",
+                "out": "schacHomeOrganizationType"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissLibraryPersonResidenceCanton",
+                "out": "swissLibraryPersonResidenceCanton"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissEduIDUsage1y",
+                "out": "swissEduIDUsage1y"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissEduIDAssociatedMail",
+                "out": "swissEduIDAssociatedMail"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissEduIDAssuranceLevel",
+                "out": "swissEduIDAssuranceLevel"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissEduID",
+                "out": "swissEduID"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissEduIDLinkedAffiliation",
+                "out": "swissEduIDLinkedAffiliation"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissEduIDLinkedAffiliationMail",
+                "out": "swissEduIDLinkedAffiliationMail"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissEduIDLinkedAffiliationUniqueID",
+                "out": "swissEduIDLinkedAffiliationUniqueID"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissEduIDUniqueID",
+                "out": "swissEduIDUniqueID"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissLibraryPersonAffiliation",
+                "out": "swissLibraryPersonAffiliation"
+            }
+        },
+        {
+            "pass": {
+                "in": "swissLibraryPersonResidence",
+                "out": "swissLibraryPersonResidence"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonAssurance",
+                "out": "eduPersonAssurance"
+            }
+        },
+        {
+            "pass": {
+                "in": "telephoneNumber",
+                "out": "telephoneNumber"
+            }
+        },
+        {
+            "pass": {
+                "in": "postalAddress",
+                "out": "postalAddress"
+            }
+        },
+        {
+            "pass": {
+                "in": "employeeNumber",
+                "out": "employeeNumber"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonEntitlement",
+                "out": "eduPersonEntitlement"
+            }
+        },
+        {
+            "pass": {
+                "in": "homePostalAddress",
+                "out": "homePostalAddress"
+            }
+        },
+        {
+            "pass": {
+                "in": "isMemberOf",
+                "out": "isMemberOf"
+            }
+        },
+        {
+            "pass": {
+                "in": "mobile",
+                "out": "mobile"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonNickname",
+                "out": "eduPersonNickname"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonOrcid",
+                "out": "eduPersonOrcid"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonOrgDN",
+                "out": "eduPersonOrgDN"
+            }
+        },
+        {
+            "pass": {
+                "in": "ou",
+                "out": "ou"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonOrgUnitDN",
+                "out": "eduPersonOrgUnitDN"
+            }
+        },
+        {
+            "pass": {
+                "in": "preferredLanguage",
+                "out": "preferredLanguage"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonPrimaryAffiliation",
+                "out": "eduPersonPrimaryAffiliation"
+            }
+        },
+        {
+            "pass": {
+                "in": "eduPersonPrimaryOrgUnitDN",
+                "out": "eduPersonPrimaryOrgUnitDN"
+            }
+        },
+        {
+            "pass": {
+                "in": "homePhone",
+                "out": "homePhone"
+            }
+        },
+        {
+            "pass": {
+                "in": "schacCountryOfCitizenship",
+                "out": "schacCountryOfCitizenship"
+            }
+        },
+        {
+            "pass": {
+                "in": "schacPersonalUniqueCode",
+                "out": "schacPersonalUniqueCode"
+            }
+        },
+        {
+            "pass": {
+                "in": "sshPublicKey",
+                "out": "sshPublicKey"
+            }
+        },
+        {
+            "pass": {
+                "in": "uid",
+                "out": "uid"
+            }
+        },
+        {
+            "pass": {
+                "in": "uidNumber",
+                "out": "uidNumber"
+            }
+        },
+        {
+            "pass": {
+                "in": "userPrincipalName",
+                "out": "userPrincipalName"
+            }
+        }
+    ]
+}
+```
